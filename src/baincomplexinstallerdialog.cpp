@@ -114,7 +114,7 @@ void BainComplexInstallerDialog::on_manualBtn_clicked()
 
 void BainComplexInstallerDialog::on_packageBtn_clicked()
 {
-  TextViewer viewer(this);
+  TextViewer viewer(m_PackageTXT, this);
   viewer.setDescription("");
   viewer.addFile(m_PackageTXT, false);
   viewer.exec();
