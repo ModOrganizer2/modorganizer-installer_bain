@@ -25,6 +25,9 @@ along with Mod Organizer.  If not, see <http://www.gnu.org/licenses/>.
 #include <QtPlugin>
 
 
+using namespace MOBase;
+
+
 InstallerBAIN::InstallerBAIN()
 {
 }

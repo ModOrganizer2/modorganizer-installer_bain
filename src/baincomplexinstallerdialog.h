@@ -34,7 +34,7 @@ class BainComplexInstallerDialog;
 /**
  * @brief Dialog to choose from options offered by a (complex) bain package
  **/
-class BainComplexInstallerDialog : public TutorableDialog
+class BainComplexInstallerDialog : public MOBase::TutorableDialog
 {
   Q_OBJECT
   
@@ -47,7 +47,7 @@ public:
   * @param packageTXT path to the extracted package.txt file or an empty string if there is none
   * @param parent parent widget
   **/
- explicit BainComplexInstallerDialog(DirectoryTree *tree, const QString &modName, const QString &packageTXT, QWidget *parent);
+ explicit BainComplexInstallerDialog(MOBase::DirectoryTree *tree, const QString &modName, const QString &packageTXT, QWidget *parent);
   ~BainComplexInstallerDialog();
 
   /**
@@ -68,7 +68,7 @@ public:
    * @param tree input tree. (TODO isn't this the same as the tree passed in the constructor?)
    * @return DataTree* a new tree with only the selected options and directories arranged correctly. The caller takes custody of this pointer!
    **/
-  DirectoryTree *updateTree(DirectoryTree *tree);
+  MOBase::DirectoryTree *updateTree(MOBase::DirectoryTree *tree);
 
 private slots:
 
@@ -82,7 +82,7 @@ private slots:
 
 private:
 
-  void moveTreeUp(DirectoryTree *target, DirectoryTree::Node *child);
+  void moveTreeUp(MOBase::DirectoryTree *target, MOBase::DirectoryTree::Node *child);
 
 private:
 
