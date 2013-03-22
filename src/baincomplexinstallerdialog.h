@@ -24,6 +24,7 @@ along with Mod Organizer.  If not, see <http://www.gnu.org/licenses/>.
 #include "mytree.h"
 #include "tutorabledialog.h"
 #include <directorytree.h>
+#include <guessedvalue.h>
 
 
 namespace Ui {
@@ -47,7 +48,8 @@ public:
   * @param packageTXT path to the extracted package.txt file or an empty string if there is none
   * @param parent parent widget
   **/
- explicit BainComplexInstallerDialog(MOBase::DirectoryTree *tree, const QString &modName, const QString &packageTXT, QWidget *parent);
+ explicit BainComplexInstallerDialog(MOBase::DirectoryTree *tree, const MOBase::GuessedValue<QString> &modName,
+                                     const QString &packageTXT, QWidget *parent);
   ~BainComplexInstallerDialog();
 
   /**

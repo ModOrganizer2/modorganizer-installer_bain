@@ -23,13 +23,21 @@ along with Mod Organizer.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QDir>
 
-BainComplexInstallerDialog::BainComplexInstallerDialog(DirectoryTree *tree, const QString &modName, const QString &packageTXT, QWidget *parent)
+
+using namespace MOBase;
+
+
+BainComplexInstallerDialog::BainComplexInstallerDialog(DirectoryTree *tree, const GuessedValue<QString> &modName, const QString &packageTXT, QWidget *parent)
   : TutorableDialog("BainInstaller", parent), ui(new Ui::BainComplexInstallerDialog), m_Manual(false),
     m_PackageTXT(packageTXT)
 {
   ui->setupUi(this);
 
-  ui->nameEdit->setText(modName);
+  for (auto iter = modName.variants().begin(); iter != modName.variants().end(); ++iter) {
+    ui->nameCombo->addItem(*iter);
+  }
+
+  ui->nameCombo->setCurrentIndex(ui->nameCombo->findText(modName));
 
   for (DirectoryTree::const_node_iterator iter = tree->nodesBegin(); iter != tree->nodesEnd(); ++iter) {
     const QString &dirName = (*iter)->getData().name;
@@ -58,7 +66,7 @@ BainComplexInstallerDialog::~BainComplexInstallerDialog()
 
 QString BainComplexInstallerDialog::getName() const
 {
-  return ui->nameEdit->text();
+  return ui->nameCombo->currentText();
 }
 
 
