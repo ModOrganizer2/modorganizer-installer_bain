@@ -128,7 +128,7 @@ bool InstallerBAIN::isArchiveSupported(const DirectoryTree &tree) const
   return true;
 }
 
-IPluginInstaller::EInstallResult InstallerBAIN::install(QString &modName, DirectoryTree &tree)
+IPluginInstaller::EInstallResult InstallerBAIN::install(GuessedValue<QString> &modName, DirectoryTree &tree)
 {
   QString packageTXT = manager()->extractFile("package.txt");
 
@@ -138,7 +138,7 @@ IPluginInstaller::EInstallResult InstallerBAIN::install(QString &modName, Direct
   QFile::remove(QDir::tempPath().append("/package.txt"));
 
   if (res == QDialog::Accepted) {
-    modName = dialog.getName();
+    modName.update(dialog.getName(), GUESS_USER);
 
     // create a new tree with the selected directories mapped to the
     // base directory. This is destructive on the original tree
@@ -148,7 +148,7 @@ IPluginInstaller::EInstallResult InstallerBAIN::install(QString &modName, Direct
     return IPluginInstaller::RESULT_SUCCESS;
   } else {
     if (dialog.manualRequested()) {
-      modName = dialog.getName();
+      modName.update(dialog.getName(), GUESS_USER);
       return IPluginInstaller::RESULT_MANUALREQUESTED;
     } else {
       return IPluginInstaller::RESULT_CANCELED;
