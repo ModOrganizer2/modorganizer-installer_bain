@@ -128,7 +128,8 @@ bool InstallerBAIN::isArchiveSupported(const DirectoryTree &tree) const
   return true;
 }
 
-IPluginInstaller::EInstallResult InstallerBAIN::install(GuessedValue<QString> &modName, DirectoryTree &tree)
+IPluginInstaller::EInstallResult InstallerBAIN::install(GuessedValue<QString> &modName, DirectoryTree &tree,
+                                                        QString&, int&)
 {
   QString packageTXT = manager()->extractFile("package.txt");
 
