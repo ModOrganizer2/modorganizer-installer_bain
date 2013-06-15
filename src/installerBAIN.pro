@@ -24,3 +24,6 @@ include(../plugin_template.pri)
 
 FORMS += \
     baincomplexinstallerdialog.ui
+
+OTHER_FILES += \
+    installerbain.json

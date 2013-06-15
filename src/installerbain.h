@@ -28,6 +28,9 @@ class InstallerBAIN : public MOBase::IPluginInstallerSimple
 {
   Q_OBJECT
   Q_INTERFACES(MOBase::IPlugin MOBase::IPluginInstaller MOBase::IPluginInstallerSimple)
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+  Q_PLUGIN_METADATA(IID "org.tannin.InstallerBAIN" FILE "installerbain.json")
+#endif
 
 public:
 
