@@ -10,6 +10,11 @@ TEMPLATE = lib
 CONFIG += plugins
 CONFIG += dll
 
+CONFIG(release, debug|release) {
+  QMAKE_CXXFLAGS += /Zi
+  QMAKE_LFLAGS += /DEBUG
+}
+
 QT += declarative script
 
 DEFINES += INSTALLERBAIN_LIBRARY
