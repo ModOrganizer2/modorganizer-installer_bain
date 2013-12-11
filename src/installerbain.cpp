@@ -110,6 +110,7 @@ bool InstallerBAIN::isArchiveSupported(const DirectoryTree &tree) const
     // ignore fomod in case of combined fomod/bain packages.
     // dirs starting with -- are supposed to be ignored
     if ((dirName.compare("fomod", Qt::CaseInsensitive) == 0) ||
+        (dirName.compare("omod conversion data", Qt::CaseInsensitive) == 0) ||
         (dirName.startsWith("--"))) {
       --numDirs;
       continue;
