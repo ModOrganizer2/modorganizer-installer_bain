@@ -23,6 +23,7 @@ along with Mod Organizer.  If not, see <http://www.gnu.org/licenses/>.
 #include <iinstallationmanager.h>
 #include <QDir>
 #include <QtPlugin>
+#include <QMessageBox>
 
 
 using namespace MOBase;
@@ -56,7 +57,7 @@ QString InstallerBAIN::description() const
 
 VersionInfo InstallerBAIN::version() const
 {
-  return VersionInfo(1, 0, 0, VersionInfo::RELEASE_FINAL);
+  return VersionInfo(1, 0, 1, VersionInfo::RELEASE_FINAL);
 }
 
 bool InstallerBAIN::isActive() const
@@ -101,7 +102,9 @@ bool InstallerBAIN::isValidTopLayer(const DirectoryTree::Node *node) const
 
 bool InstallerBAIN::isArchiveSupported(const DirectoryTree &tree) const
 {
-  int numDirs = tree.numNodes();
+  int numValidDirs = 0;
+  int numInvalidDirs = 0;
+
   // each directory would have to serve as a top-level directory
   for (DirectoryTree::const_node_iterator iter = tree.nodesBegin();
        iter != tree.nodesEnd(); ++iter) {
@@ -112,18 +115,27 @@ bool InstallerBAIN::isArchiveSupported(const DirectoryTree &tree) const
     if ((dirName.compare("fomod", Qt::CaseInsensitive) == 0) ||
         (dirName.compare("omod conversion data", Qt::CaseInsensitive) == 0) ||
         (dirName.startsWith("--"))) {
-      --numDirs;
       continue;
     }
 
-    if (!isValidTopLayer(*iter)) {
-      return false;
+    if (isValidTopLayer(*iter)) {
+      ++numValidDirs;
+    } else {
+      ++numInvalidDirs;
     }
   }
 
-  if (numDirs < 2) {
+  if (numValidDirs < 2) {
     // a complex bain package contains at least 2 directories to choose from
     return false;
+  } else if (numInvalidDirs == 0) {
+    return true;
+  } else {
+    return QMessageBox::question(parentWidget(), tr("May be BAIN installer"),
+                                 tr("This installer looks like it may contain a BAIN installer but I'm not sure. "
+                                    "Install as BAIN installer?"),
+                                 QMessageBox::Yes | QMessageBox::No)
+            == QMessageBox::Yes;
   }
 
   return true;
