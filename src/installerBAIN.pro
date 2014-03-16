@@ -15,7 +15,11 @@ CONFIG(release, debug|release) {
   QMAKE_LFLAGS += /DEBUG
 }
 
-QT += declarative script
+contains(QT_VERSION, "^5.*") {
+	QT += widgets quick script
+} else {
+	QT += declarative script
+}
 
 DEFINES += INSTALLERBAIN_LIBRARY
 
