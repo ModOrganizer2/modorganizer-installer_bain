@@ -55,6 +55,7 @@ BainComplexInstallerDialog::BainComplexInstallerDialog(DirectoryTree *tree, cons
   }
 
   ui->packageBtn->setEnabled(!packageTXT.isEmpty());
+  ui->nameCombo->setAutoCompletionCaseSensitivity(Qt::CaseSensitive);
 }
 
 
