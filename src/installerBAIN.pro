@@ -15,10 +15,10 @@ CONFIG(release, debug|release) {
   QMAKE_LFLAGS += /DEBUG
 }
 
-contains(QT_VERSION, "^5.*") {
-	QT += widgets quick script
+greaterThan(QT_MAJOR_VERSION, 4) {
+  QT += widgets quick script
 } else {
-	QT += declarative script
+  QT += declarative script
 }
 
 DEFINES += INSTALLERBAIN_LIBRARY
