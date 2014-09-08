@@ -16,7 +16,7 @@ CONFIG(release, debug|release) {
 }
 
 greaterThan(QT_MAJOR_VERSION, 4) {
-  QT += widgets quick script
+  QT += widgets declarative script
 } else {
   QT += declarative script
 }
