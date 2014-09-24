@@ -30,6 +30,7 @@ using namespace MOBase;
 
 
 InstallerBAIN::InstallerBAIN()
+  : m_MOInfo(NULL)
 {
 }
 
