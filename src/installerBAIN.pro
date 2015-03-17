@@ -35,4 +35,5 @@ FORMS += \
     baincomplexinstallerdialog.ui
 
 OTHER_FILES += \
-    installerbain.json
+    installerbain.json\
+    SConscript
