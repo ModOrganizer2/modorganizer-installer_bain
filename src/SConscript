@@ -1,0 +1,15 @@
+Import('qt_env')
+
+env = qt_env.Clone()
+
+env.EnableQtModules('Declarative', 'Script')
+
+env.AppendUnique(CPPDEFINES = [ 'INSTALLERBAIN_LIBRARY' ])
+
+# Sigh
+env['CPPPATH'] += [ '.' ]
+
+env.Uic4(env.Glob('*.ui'))
+
+lib = env.SharedLibrary('installerBAIN', env.Glob('*.cpp'))
+env.InstallModule(lib)
