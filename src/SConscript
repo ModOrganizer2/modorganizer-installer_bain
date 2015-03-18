@@ -2,34 +2,14 @@ Import('qt_env')
 
 env = qt_env.Clone()
 
-modules = [
-    'Core',
-    'Gui',
-    'Declarative',
-    'Script'
-]
-
-if env['QT_MAJOR_VERSION'] > 4:
-    modules += [ 'Widgets' ]
-
-env.EnableQt4Modules(['Qt' + n for n in modules],
-                     debug = env['CONFIG'] == 'debug')
+env.EnableQtModules('Declarative', 'Script')
 
 env.AppendUnique(CPPDEFINES = [ 'INSTALLERBAIN_LIBRARY' ])
 
 # Sigh
 env['CPPPATH'] += [ '.' ]
 
-env.RequireLibraries('uibase')
-
 env.Uic4(env.Glob('*.ui'))
 
 lib = env.SharedLibrary('installerBAIN', env.Glob('*.cpp'))
-env.InstallPlugin(lib)
-
-"""
-CONFIG(release, debug|release) {
-  QMAKE_CXXFLAGS += /Zi
-  QMAKE_LFLAGS += /DEBUG
-}
-"""
+env.InstallModule(lib)
