@@ -9,7 +9,7 @@ env.AppendUnique(CPPDEFINES = [ 'INSTALLERBAIN_LIBRARY' ])
 # Sigh
 env['CPPPATH'] += [ '.' ]
 
-env.Uic4(env.Glob('*.ui'))
+env.Uic(env.Glob('*.ui'))
 
 lib = env.SharedLibrary('installerBAIN', env.Glob('*.cpp'))
 env.InstallModule(lib)
