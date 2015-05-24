@@ -58,7 +58,7 @@ QString InstallerBAIN::description() const
 
 VersionInfo InstallerBAIN::version() const
 {
-  return VersionInfo(1, 0, 1, VersionInfo::RELEASE_FINAL);
+  return VersionInfo(1, 0, 2, VersionInfo::RELEASE_FINAL);
 }
 
 bool InstallerBAIN::isActive() const
@@ -150,7 +150,7 @@ IPluginInstaller::EInstallResult InstallerBAIN::install(GuessedValue<QString> &m
   BainComplexInstallerDialog dialog(&tree, modName, packageTXT, parentWidget());
 
   int res = dialog.exec();
-  QFile::remove(QDir::tempPath().append("/package.txt"));
+  QFile::remove(QDir::tempPath() + "/package.txt");
 
   if (res == QDialog::Accepted) {
     modName.update(dialog.getName(), GUESS_USER);

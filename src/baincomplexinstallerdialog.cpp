@@ -89,9 +89,9 @@ void BainComplexInstallerDialog::moveTreeUp(DirectoryTree *target, DirectoryTree
 DirectoryTree *BainComplexInstallerDialog::updateTree(DirectoryTree *tree)
 {
   DirectoryTree *newTree = new DirectoryTree;
-
-  for (DirectoryTree::const_node_reverse_iterator iter = tree->nodesRBegin();
-       iter != tree->nodesREnd();) {
+  // create a new tree adding all "wanted" options and leaving the unwanted ones in the old tree
+  for (DirectoryTree::const_node_iterator iter = tree->nodesBegin();
+       iter != tree->nodesEnd();) {
     QList<QListWidgetItem*> items = ui->optionsList->findItems((*iter)->getData().name, Qt::MatchFixedString);
     if ((items.count() == 1) && (items.at(0)->checkState() == Qt::Checked)) {
       moveTreeUp(newTree, *iter);
