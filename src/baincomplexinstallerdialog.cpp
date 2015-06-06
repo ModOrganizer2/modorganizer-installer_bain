@@ -40,14 +40,13 @@ BainComplexInstallerDialog::BainComplexInstallerDialog(DirectoryTree *tree, cons
   ui->nameCombo->setCurrentIndex(ui->nameCombo->findText(modName));
 
   for (DirectoryTree::const_node_iterator iter = tree->nodesBegin(); iter != tree->nodesEnd(); ++iter) {
-    const QString &dirName = (*iter)->getData().name;
-    if ((dirName.compare("fomod", Qt::CaseInsensitive) == 0) ||
-        (dirName.startsWith("--"))) {
+    const FileNameString &dirName = (*iter)->getData().name;
+    if (dirName == "fomod" || dirName.startsWith("--")) {
       continue;
     }
 
     QListWidgetItem *item = new QListWidgetItem(ui->optionsList);
-    item->setText((*iter)->getData().name);
+    item->setText(dirName.toQString());
     item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
     item->setCheckState(item->text().mid(0, 2) == "00" ? Qt::Checked : Qt::Unchecked);
     item->setData(Qt::UserRole, qVariantFromValue((void*)(*iter)));
@@ -92,7 +91,7 @@ DirectoryTree *BainComplexInstallerDialog::updateTree(DirectoryTree *tree)
   // create a new tree adding all "wanted" options and leaving the unwanted ones in the old tree
   for (DirectoryTree::const_node_iterator iter = tree->nodesBegin();
        iter != tree->nodesEnd();) {
-    QList<QListWidgetItem*> items = ui->optionsList->findItems((*iter)->getData().name, Qt::MatchFixedString);
+    QList<QListWidgetItem*> items = ui->optionsList->findItems((*iter)->getData().name.toQString(), Qt::MatchFixedString);
     if ((items.count() == 1) && (items.at(0)->checkState() == Qt::Checked)) {
       moveTreeUp(newTree, *iter);
     }

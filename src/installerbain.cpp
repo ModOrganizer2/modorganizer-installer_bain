@@ -109,13 +109,13 @@ bool InstallerBAIN::isArchiveSupported(const DirectoryTree &tree) const
   // each directory would have to serve as a top-level directory
   for (DirectoryTree::const_node_iterator iter = tree.nodesBegin();
        iter != tree.nodesEnd(); ++iter) {
-    const QString &dirName = (*iter)->getData().name;
+    const FileNameString &dirName = (*iter)->getData().name;
 
     // ignore fomod in case of combined fomod/bain packages.
     // dirs starting with -- are supposed to be ignored
-    if ((dirName.compare("fomod", Qt::CaseInsensitive) == 0) ||
-        (dirName.compare("omod conversion data", Qt::CaseInsensitive) == 0) ||
-        (dirName.startsWith("--"))) {
+    if (dirName == "fomod" ||
+        dirName == "omod conversion data" ||
+        dirName.startsWith("--")) {
       continue;
     }
 
