@@ -58,7 +58,7 @@ QString InstallerBAIN::description() const
 
 VersionInfo InstallerBAIN::version() const
 {
-  return VersionInfo(1, 0, 2, VersionInfo::RELEASE_FINAL);
+  return VersionInfo(1, 0, 3, VersionInfo::RELEASE_FINAL);
 }
 
 bool InstallerBAIN::isActive() const
