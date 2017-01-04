@@ -37,7 +37,7 @@ LINK_DIRECTORIES(${lib_path})
 
 ADD_LIBRARY(${PROJ_NAME} SHARED ${${PROJ_NAME}_HDRS} ${${PROJ_NAME}_SRCS} ${${PROJ_NAME}_UIHDRS} ${${PROJ_NAME}_translations_qm})
 TARGET_LINK_LIBRARIES(${PROJ_NAME}
-                      Qt5::Widgets Qt5::Declarative
+                      Qt5::Widgets Qt5::Qml Qt5::QuickWidgets Qt5::Script
                       ${Boost_LIBRARIES}
                       uibase)
 
@@ -54,7 +54,7 @@ IF (NOT "${OPTIMIZE_LINK_FLAGS}" STREQUAL "")
   SET_TARGET_PROPERTIES(${PROJ_NAME} PROPERTIES LINK_FLAGS_RELWITHDEBINFO ${OPTIMIZE_LINK_FLAGS})
 ENDIF()
 
-QT5_USE_MODULES(${PROJ_NAME} Widgets Declarative)
+QT5_USE_MODULES(${PROJ_NAME} Widgets Script Qml QuickWidgets)
 
 ###############
 ## Installation
