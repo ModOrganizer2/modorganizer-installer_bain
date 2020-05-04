@@ -96,9 +96,6 @@ void BainComplexInstallerDialog::updateTree(std::shared_ptr<IFileTree> &tree)
         newTree->merge(entry->astree());
       }
     }
-    else {
-      newTree->insert(entry);
-    }
   }
 
   tree = newTree;
