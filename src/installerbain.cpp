@@ -17,8 +17,10 @@ You should have received a copy of the GNU General Public License
 along with Mod Organizer.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <installationtester.h>
 #include <iinstallationmanager.h>
+#include <moddatachecker.h>
+#include <iplugingame.h>
+
 #include <QDir>
 #include <QtPlugin>
 #include <QMessageBox>
@@ -84,27 +86,14 @@ bool InstallerBAIN::isManualInstaller() const
   return false;
 }
 
-bool InstallerBAIN::isValidTopLayer(const IFileTree *node) const
-{
-  for (auto entry: *node) {
-    // see if there is at least one directory that makes sense on the top level
-    if (entry->isDir()) {
-      if (isTopLevelDirectoryBain(entry->name())) {
-        log::debug("BAIN: {} on the top level.", entry->name());
-        return true;
-      }
-    }
-    // see if there is a file that makes sense on the top level
-    else if (isTopLevelSuffix(entry->suffix())) {
-      return true;
-    }
-  }
-
-  return false;
-}
-
 bool InstallerBAIN::isArchiveSupported(std::shared_ptr<const IFileTree> tree) const
 {
+  ModDataChecker* checker = m_MOInfo->managedGame()->feature<ModDataChecker>();
+
+  if (!checker) {
+    return false;
+  }
+
   int numValidDirs = 0;
   int numInvalidDirs = 0;
 
@@ -125,7 +114,7 @@ bool InstallerBAIN::isArchiveSupported(std::shared_ptr<const IFileTree> tree) co
       continue;
     }
 
-    if (isValidTopLayer(entry->astree().get())) {
+    if (checker->dataLooksValid(entry->astree())) {
       ++numValidDirs;
     } else {
       ++numInvalidDirs;
@@ -179,27 +168,6 @@ IPluginInstaller::EInstallResult InstallerBAIN::install(GuessedValue<QString> &m
   }
 }
 
-
-bool InstallerBAIN::isTopLevelDirectoryBain(QString const& dirName)
-{
-  static std::set<QString, MOBase::FileNameComparator> tlDirectoryNames = {
-    "fonts", "interface", "menus", "meshes", "music", "scripts", "shaders",
-    "sound", "strings", "textures", "trees", "video", "facegen", "materials",
-    "skse", "obse", "mwse", "nvse", "fose", "f4se", "distantlod", "asi",
-    "SkyProc Patchers", "Tools", "MCM", "icons", "bookart", "distantland",
-    "mits", "splash", "dllplugins", "Docs", "INITweaks", "CalienteTools",
-    "NetScriptFramework", "shadersfx"
-  };
-
-  return tlDirectoryNames.count(dirName) != 0;
-}
-
-bool InstallerBAIN::isTopLevelSuffix(QString const& suffix)
-{
-  // Not sure if case-insensitive comparison is needed for suffix, but...
-  static std::set<QString, MOBase::FileNameComparator> tlSuffixes = { "esp", "esm", "esl", "bsa", "ba2", ".modgroups" };
-  return tlSuffixes.count(suffix) != 0;
-}
 
 #if QT_VERSION < QT_VERSION_CHECK(5,0,0)
 Q_EXPORT_PLUGIN2(installerBAIN, InstallerBAIN)
