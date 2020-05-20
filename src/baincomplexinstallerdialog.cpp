@@ -75,10 +75,7 @@ QString BainComplexInstallerDialog::getName() const
 
 void BainComplexInstallerDialog::updateTree(std::shared_ptr<IFileTree> &tree)
 {
-  // Note (Holt59): The version with DirectoryTree was a bit convoluted
-  // as the only things that need to be done is removed directory not selected,
-  // and these directory can only be at the root of the tree.
-
+  // Retrieve the list of selected names:
   std::set<QString, FileNameComparator> selectedNames;
   for (int i = 0; i < ui->optionsList->count(); ++i) {
     QListWidgetItem* item = ui->optionsList->item(i);
@@ -87,14 +84,11 @@ void BainComplexInstallerDialog::updateTree(std::shared_ptr<IFileTree> &tree)
     }
   }
 
-  // Start from an empty tree and insert everything (easier since
-  // we cannot modify the tree while iterating):
+  // Create a new empty tree and merge all the selected folder in it:
   auto newTree = tree->createOrphanTree();
   for (auto& entry : *tree) {
-    if (entry->isDir()) {
-      if (selectedNames.count(entry->name()) > 0) {
+    if (entry->isDir() && selectedNames.count(entry->name()) > 0) {
         newTree->merge(entry->astree());
-      }
     }
   }
 
