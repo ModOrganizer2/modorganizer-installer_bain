@@ -56,22 +56,6 @@ If there is a component called &quot;00 Core&quot; it is usually required. Optio
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QPushButton" name="packageBtn">
-       <property name="toolTip">
-        <string>The package.txt is often part of BAIN packages and contains details about the options available.</string>
-       </property>
-       <property name="whatsThis">
-        <string>The package.txt is often part of BAIN packages and contains details about the options available.</string>
-       </property>
-       <property name="text">
-        <string notr="true">Package.txt</string>
-       </property>
-       <property name="autoDefault">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QPushButton" name="manualBtn">
        <property name="toolTip">
         <string>Opens a Dialog that allows custom modifications.</string>
@@ -81,6 +65,22 @@ If there is a component called &quot;00 Core&quot; it is usually required. Optio
        </property>
        <property name="text">
         <string>Manual</string>
+       </property>
+       <property name="autoDefault">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="packageBtn">
+       <property name="toolTip">
+        <string>The package.txt is often part of BAIN packages and contains details about the options available.</string>
+       </property>
+       <property name="whatsThis">
+        <string>The package.txt is often part of BAIN packages and contains details about the options available.</string>
+       </property>
+       <property name="text">
+        <string notr="true">Package.txt</string>
        </property>
        <property name="autoDefault">
         <bool>false</bool>

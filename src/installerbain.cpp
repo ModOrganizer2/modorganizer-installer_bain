@@ -17,13 +17,16 @@ You should have received a copy of the GNU General Public License
 along with Mod Organizer.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "installerbain.h"
-#include "baincomplexinstallerdialog.h"
 #include <installationtester.h>
 #include <iinstallationmanager.h>
 #include <QDir>
 #include <QtPlugin>
 #include <QMessageBox>
+
+#include <log.h>
+
+#include "installerbain.h"
+#include "baincomplexinstallerdialog.h"
 
 
 using namespace MOBase;
@@ -81,19 +84,18 @@ bool InstallerBAIN::isManualInstaller() const
   return false;
 }
 
-bool InstallerBAIN::isValidTopLayer(const DirectoryTree::Node *node) const
+bool InstallerBAIN::isValidTopLayer(const IFileTree *node) const
 {
-  // see if there is at least one directory that makes sense on the top level
-  for (DirectoryTree::const_node_iterator iter = node->nodesBegin(); iter != node->nodesEnd(); ++iter) {
-    if (InstallationTester::isTopLevelDirectoryBain((*iter)->getData().name)) {
-      qDebug("%s on the top level", (*iter)->getData().name.toUtf8().constData());
-      return true;
+  for (auto entry: *node) {
+    // see if there is at least one directory that makes sense on the top level
+    if (entry->isDir()) {
+      if (isTopLevelDirectoryBain(entry->name())) {
+        log::debug("BAIN: {} on the top level.", entry->name());
+        return true;
+      }
     }
-  }
-
-  // see if there is a file that makes sense on the top level
-  for (DirectoryTree::const_leaf_iterator iter = node->leafsBegin(); iter != node->leafsEnd(); ++iter) {
-    if (InstallationTester::isTopLevelSuffix(iter->getName())) {
+    // see if there is a file that makes sense on the top level
+    else if (isTopLevelSuffix(entry->suffix())) {
       return true;
     }
   }
@@ -101,25 +103,29 @@ bool InstallerBAIN::isValidTopLayer(const DirectoryTree::Node *node) const
   return false;
 }
 
-bool InstallerBAIN::isArchiveSupported(const DirectoryTree &tree) const
+bool InstallerBAIN::isArchiveSupported(std::shared_ptr<const IFileTree> tree) const
 {
   int numValidDirs = 0;
   int numInvalidDirs = 0;
 
   // each directory would have to serve as a top-level directory
-  for (DirectoryTree::const_node_iterator iter = tree.nodesBegin();
-       iter != tree.nodesEnd(); ++iter) {
-    const FileNameString &dirName = (*iter)->getData().name;
+  for (auto entry: *tree) {
+
+    if (!entry->isDir()) {
+      continue;
+    }
+
+    QString dirName = entry->name().toLower();
 
     // ignore fomod in case of combined fomod/bain packages.
     // dirs starting with -- are supposed to be ignored
-    if (dirName == "fomod" ||
-        dirName == "omod conversion data" ||
+    if (FileNameComparator::compare(dirName, "fomod") == 0 ||
+      FileNameComparator::compare(dirName, "omod conversion data") == 0 ||
         dirName.startsWith("--")) {
       continue;
     }
 
-    if (isValidTopLayer(*iter)) {
+    if (isValidTopLayer(entry->astree().get())) {
       ++numValidDirs;
     } else {
       ++numInvalidDirs;
@@ -142,24 +148,26 @@ bool InstallerBAIN::isArchiveSupported(const DirectoryTree &tree) const
   return true;
 }
 
-IPluginInstaller::EInstallResult InstallerBAIN::install(GuessedValue<QString> &modName, DirectoryTree &tree,
+IPluginInstaller::EInstallResult InstallerBAIN::install(GuessedValue<QString> &modName, std::shared_ptr<IFileTree> &tree,
                                                         QString&, int&)
 {
-  QString packageTXT = manager()->extractFile("package.txt");
+  auto entry = tree->find("package.txt", FileTreeEntry::FILE);
 
-  BainComplexInstallerDialog dialog(&tree, modName, packageTXT, parentWidget());
+  QString packageTXT;
+  if (entry != nullptr) {
+    packageTXT = manager()->extractFile(entry);
+  }
+
+  BainComplexInstallerDialog dialog(tree, modName, packageTXT, parentWidget());
 
   int res = dialog.exec();
-  QFile::remove(QDir::tempPath() + "/package.txt");
 
   if (res == QDialog::Accepted) {
     modName.update(dialog.getName(), GUESS_USER);
 
-    // create a new tree with the selected directories mapped to the
-    // base directory. This is destructive on the original tree
-    DirectoryTree *newTree = dialog.updateTree(&tree);
-    tree = *newTree;
-    delete newTree;
+    // Upda the tree:
+    dialog.updateTree(tree);
+
     return IPluginInstaller::RESULT_SUCCESS;
   } else {
     if (dialog.manualRequested()) {
@@ -169,6 +177,28 @@ IPluginInstaller::EInstallResult InstallerBAIN::install(GuessedValue<QString> &m
       return IPluginInstaller::RESULT_CANCELED;
     }
   }
+}
+
+
+bool InstallerBAIN::isTopLevelDirectoryBain(QString const& dirName)
+{
+  static std::set<QString, MOBase::FileNameComparator> tlDirectoryNames = {
+    "fonts", "interface", "menus", "meshes", "music", "scripts", "shaders",
+    "sound", "strings", "textures", "trees", "video", "facegen", "materials",
+    "skse", "obse", "mwse", "nvse", "fose", "f4se", "distantlod", "asi",
+    "SkyProc Patchers", "Tools", "MCM", "icons", "bookart", "distantland",
+    "mits", "splash", "dllplugins", "Docs", "INITweaks", "CalienteTools",
+    "NetScriptFramework", "shadersfx"
+  };
+
+  return tlDirectoryNames.count(dirName) != 0;
+}
+
+bool InstallerBAIN::isTopLevelSuffix(QString const& suffix)
+{
+  // Not sure if case-insensitive comparison is needed for suffix, but...
+  static std::set<QString, MOBase::FileNameComparator> tlSuffixes = { "esp", "esm", "esl", "bsa", "ba2", ".modgroups" };
+  return tlSuffixes.count(suffix) != 0;
 }
 
 #if QT_VERSION < QT_VERSION_CHECK(5,0,0)

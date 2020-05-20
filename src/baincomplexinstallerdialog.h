@@ -20,11 +20,10 @@ along with Mod Organizer.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef BAINCOMPLEXINSTALLERDIALOG_H
 #define BAINCOMPLEXINSTALLERDIALOG_H
 
-
-#include "mytree.h"
-#include "tutorabledialog.h"
-#include <directorytree.h>
 #include <guessedvalue.h>
+#include "ifiletree.h"
+
+#include "tutorabledialog.h"
 
 
 namespace Ui {
@@ -48,7 +47,7 @@ public:
   * @param packageTXT path to the extracted package.txt file or an empty string if there is none
   * @param parent parent widget
   **/
- explicit BainComplexInstallerDialog(MOBase::DirectoryTree *tree, const MOBase::GuessedValue<QString> &modName,
+ explicit BainComplexInstallerDialog(std::shared_ptr<MOBase::IFileTree> tree, const MOBase::GuessedValue<QString> &modName,
                                      const QString &packageTXT, QWidget *parent);
   ~BainComplexInstallerDialog();
 
@@ -63,14 +62,11 @@ public:
   QString getName() const;
 
   /**
-   * @brief retrieve the updated archive tree from the dialog. The caller is responsible to delete the returned tree.
+   * @brief Remove from the given tree the option not selected by the user.
    * 
-   * @note This call is destructive on the input tree!
-   *
-   * @param tree input tree. (TODO isn't this the same as the tree passed in the constructor?)
-   * @return DataTree* a new tree with only the selected options and directories arranged correctly. The caller takes custody of this pointer!
+   * @param tree The input tree.
    **/
-  MOBase::DirectoryTree *updateTree(MOBase::DirectoryTree *tree);
+  void updateTree(std::shared_ptr<MOBase::IFileTree> &tree);
 
 private slots:
 
@@ -81,10 +77,6 @@ private slots:
   void on_cancelBtn_clicked();
 
   void on_packageBtn_clicked();
-
-private:
-
-  void moveTreeUp(MOBase::DirectoryTree *target, MOBase::DirectoryTree::Node *child);
 
 private:
 
