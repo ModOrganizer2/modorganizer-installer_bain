@@ -53,34 +53,6 @@ public:
 
 private:
 
-  bool isValidTopLayer(const MOBase::IFileTree *tree) const;
-
-  /**
-   * @brief Test if the specified directory qualifies as a top-level directory. A top-level directory
-   * is one that contains data used by the game and goes directly below the "data" directory.
-   * The most common examples are "textures" and "meshes". On top of these, this function will 
-   * also accept directories that are not used by the game itself but by the BAIN installer ("ini tweaks" 
-   * and docs)
-   *
-   * @param dirName The directory name to test.
-   *
-   * @return true if the specified directory is a top-level directory
-   **/
-  static bool isTopLevelDirectoryBain(const QString& dirName);
-
-  /**
-   * Test if the specified file qualifies as a top-level file. A top-level file is one
-   * that will be used by the game if it's directly inside the "data" directory.
-   * These are ".esp", ".esm", ".esl" and ".bsa".
-   *
-   * @param suffix Extension of the file to test.
-
-   * @return bool
-   **/
-  static bool isTopLevelSuffix(const QString& suffix);
-
-private:
-
   const MOBase::IOrganizer *m_MOInfo;
 
 };
