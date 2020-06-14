@@ -114,7 +114,7 @@ bool InstallerBAIN::isArchiveSupported(std::shared_ptr<const IFileTree> tree) co
       continue;
     }
 
-    if (checker->dataLooksValid(entry->astree())) {
+    if (checker->dataLooksValid(entry->astree()) == ModDataChecker::CheckReturn::VALID) {
       ++numValidDirs;
     } else {
       ++numInvalidDirs;
