@@ -30,29 +30,29 @@ If there is a component called &quot;00 Core&quot; it is usually required. Optio
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="baincomplexinstallerdialog.ui" line="61"/>
-        <location filename="baincomplexinstallerdialog.ui" line="64"/>
+        <location filename="baincomplexinstallerdialog.ui" line="77"/>
+        <location filename="baincomplexinstallerdialog.ui" line="80"/>
         <source>The package.txt is often part of BAIN packages and contains details about the options available.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="baincomplexinstallerdialog.ui" line="87"/>
-        <location filename="baincomplexinstallerdialog.ui" line="90"/>
+        <location filename="baincomplexinstallerdialog.ui" line="61"/>
+        <location filename="baincomplexinstallerdialog.ui" line="64"/>
         <source>Opens a Dialog that allows custom modifications.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="baincomplexinstallerdialog.ui" line="93"/>
+        <location filename="baincomplexinstallerdialog.ui" line="67"/>
         <source>Manual</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="baincomplexinstallerdialog.ui" line="100"/>
+        <location filename="baincomplexinstallerdialog.ui" line="106"/>
         <source>Ok</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="baincomplexinstallerdialog.ui" line="107"/>
+        <location filename="baincomplexinstallerdialog.ui" line="113"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
@@ -60,17 +60,17 @@ If there is a component called &quot;00 Core&quot; it is usually required. Optio
 <context>
     <name>InstallerBAIN</name>
     <message>
-        <location filename="installerbain.cpp" line="56"/>
+        <location filename="installerbain.cpp" line="61"/>
         <source>Installer for BAIN archives (originally targeting Wrye Bash)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="installerbain.cpp" line="135"/>
+        <location filename="installerbain.cpp" line="130"/>
         <source>May be BAIN installer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="installerbain.cpp" line="136"/>
+        <location filename="installerbain.cpp" line="131"/>
         <source>This installer looks like it may contain a BAIN installer but I&apos;m not sure. Install as BAIN installer?</source>
         <translation type="unfinished"></translation>
     </message>
