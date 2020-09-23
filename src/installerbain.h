@@ -47,6 +47,9 @@ public:
   virtual unsigned int priority() const;
   virtual bool isManualInstaller() const;
 
+  virtual void onInstallationStart(QString const& archive, bool reinstallation, MOBase::IModInterface* currentMod) override;
+  virtual void onInstallationEnd(EInstallResult result, MOBase::IModInterface* newMod) override;
+
   virtual bool isArchiveSupported(std::shared_ptr<const MOBase::IFileTree> tree) const;
   virtual EInstallResult install(MOBase::GuessedValue<QString> &modName, std::shared_ptr<MOBase::IFileTree> &tree,
                                  QString &version, int &modID);
@@ -55,6 +58,11 @@ private:
 
   const MOBase::IOrganizer *m_MOInfo;
 
+  // Indicates if the installer was used:
+  bool m_InstallerUsed;
+
+  // List of options currently installed and being installed:
+  QStringList m_PreviousOptions, m_SelectedOptions;
 };
 
 #endif // INSTALLERBAIN_H

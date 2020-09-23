@@ -29,7 +29,7 @@ using namespace MOBase;
 
 BainComplexInstallerDialog::BainComplexInstallerDialog(
   std::shared_ptr<MOBase::IFileTree> tree, const GuessedValue<QString> &modName, 
-  const QString &packageTXT, QWidget *parent)
+  const QStringList& defaultOptions, const QString &packageTXT, QWidget *parent)
   : TutorableDialog("BainInstaller", parent), ui(new Ui::BainComplexInstallerDialog), m_Manual(false),
     m_PackageTXT(packageTXT)
 {
@@ -52,7 +52,13 @@ BainComplexInstallerDialog::BainComplexInstallerDialog(
     QListWidgetItem *item = new QListWidgetItem(ui->optionsList);
     item->setText(dirName);
     item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
-    item->setCheckState(item->text().mid(0, 2) == "00" ? Qt::Checked : Qt::Unchecked);
+
+    if (dirName.mid(0, 2) == "00" || defaultOptions.contains(dirName, Qt::CaseInsensitive)) {
+      item->setCheckState(Qt::Checked);
+    }
+    else {
+      item->setCheckState(Qt::Unchecked);
+    }
 
     ui->optionsList->addItem(item);
   }
@@ -73,7 +79,7 @@ QString BainComplexInstallerDialog::getName() const
   return ui->nameCombo->currentText();
 }
 
-void BainComplexInstallerDialog::updateTree(std::shared_ptr<IFileTree> &tree)
+QStringList BainComplexInstallerDialog::updateTree(std::shared_ptr<IFileTree> &tree)
 {
   // Retrieve the list of selected names:
   std::set<QString, FileNameComparator> selectedNames;
@@ -93,6 +99,8 @@ void BainComplexInstallerDialog::updateTree(std::shared_ptr<IFileTree> &tree)
   }
 
   tree = newTree;
+
+  return QStringList(selectedNames.begin(), selectedNames.end());
 }
 
 
