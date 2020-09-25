@@ -44,10 +44,13 @@ public:
   *
   * @param tree the directory tree of the archive. The caller is resonsible to verify this actually qualifies as a bain installer
   * @param modName proposed name for the mod. The dialog allows the user to change this
+  * @param defaultOptions The default options to select. Can contains options not actually present.
   * @param packageTXT path to the extracted package.txt file or an empty string if there is none
   * @param parent parent widget
   **/
- explicit BainComplexInstallerDialog(std::shared_ptr<MOBase::IFileTree> tree, const MOBase::GuessedValue<QString> &modName,
+ explicit BainComplexInstallerDialog(std::shared_ptr<MOBase::IFileTree> tree,
+                                     const MOBase::GuessedValue<QString> &modName,
+                                     const QStringList &defaultOptions,
                                      const QString &packageTXT, QWidget *parent);
   ~BainComplexInstallerDialog();
 
@@ -65,8 +68,10 @@ public:
    * @brief Remove from the given tree the option not selected by the user.
    * 
    * @param tree The input tree.
+   *
+   * @return the list of options selected by the user.
    **/
-  void updateTree(std::shared_ptr<MOBase::IFileTree> &tree);
+  QStringList updateTree(std::shared_ptr<MOBase::IFileTree> &tree);
 
 private slots:
 

@@ -86,6 +86,33 @@ bool InstallerBAIN::isManualInstaller() const
   return false;
 }
 
+void InstallerBAIN::onInstallationStart(QString const& archive, bool reinstallation, IModInterface* currentMod)
+{
+  // We reset some field and fetch the previously installed options:
+  m_InstallerUsed = false;
+  m_PreviousOptions.clear();
+  m_SelectedOptions.clear();
+
+  if (currentMod) {
+    auto settings = currentMod->pluginSettings(name());
+    for (auto& [name, value] : settings) {
+      if (name.startsWith("option")) {
+        m_PreviousOptions.append(value.toString());
+      }
+    }
+  }
+}
+void InstallerBAIN::onInstallationEnd(EInstallResult result, IModInterface* newMod)
+{
+  if (result == EInstallResult::RESULT_SUCCESS && m_InstallerUsed) {
+    newMod->clearPluginSettings(name());
+    for (auto i = 0; i < m_SelectedOptions.size(); ++i) {
+      newMod->setPluginSetting(name(), QString("option%1").arg(i), m_SelectedOptions[i]);
+    }
+  }
+}
+
+
 bool InstallerBAIN::isArchiveSupported(std::shared_ptr<const IFileTree> tree) const
 {
   ModDataChecker* checker = m_MOInfo->managedGame()->feature<ModDataChecker>();
@@ -147,15 +174,16 @@ IPluginInstaller::EInstallResult InstallerBAIN::install(GuessedValue<QString> &m
     packageTXT = manager()->extractFile(entry);
   }
 
-  BainComplexInstallerDialog dialog(tree, modName, packageTXT, parentWidget());
+  BainComplexInstallerDialog dialog(tree, modName, m_PreviousOptions, packageTXT, parentWidget());
 
   int res = dialog.exec();
 
   if (res == QDialog::Accepted) {
     modName.update(dialog.getName(), GUESS_USER);
 
-    // Upda the tree:
-    dialog.updateTree(tree);
+    // Update the tree:
+    m_SelectedOptions = dialog.updateTree(tree);
+    m_InstallerUsed = true;
 
     return IPluginInstaller::RESULT_SUCCESS;
   } else {
