@@ -51,6 +51,12 @@ QString InstallerBAIN::name() const
   return "BAIN Installer";
 }
 
+QString InstallerBAIN::localizedName() const
+{
+  return tr("BAIN Installer");
+}
+
+
 QString InstallerBAIN::author() const
 {
   return "Tannin";
@@ -64,11 +70,6 @@ QString InstallerBAIN::description() const
 VersionInfo InstallerBAIN::version() const
 {
   return VersionInfo(1, 1, 0, VersionInfo::RELEASE_FINAL);
-}
-
-bool InstallerBAIN::isActive() const
-{
-  return true;
 }
 
 QList<PluginSetting> InstallerBAIN::settings() const
