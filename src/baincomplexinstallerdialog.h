@@ -48,7 +48,7 @@ public:
   * @param packageTXT path to the extracted package.txt file or an empty string if there is none
   * @param parent parent widget
   **/
- explicit BainComplexInstallerDialog(std::shared_ptr<MOBase::IFileTree> tree,
+ explicit BainComplexInstallerDialog(const std::vector<std::shared_ptr<const MOBase::FileTreeEntry>> &subpackages,
                                      const MOBase::GuessedValue<QString> &modName,
                                      const QStringList &defaultOptions,
                                      const QString &packageTXT, QWidget *parent);

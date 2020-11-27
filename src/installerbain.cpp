@@ -103,6 +103,7 @@ void InstallerBAIN::onInstallationStart(QString const& archive, bool reinstallat
     }
   }
 }
+
 void InstallerBAIN::onInstallationEnd(EInstallResult result, IModInterface* newMod)
 {
   if (result == EInstallResult::RESULT_SUCCESS && m_InstallerUsed) {
@@ -113,6 +114,50 @@ void InstallerBAIN::onInstallationEnd(EInstallResult result, IModInterface* newM
   }
 }
 
+std::vector<std::shared_ptr<const MOBase::FileTreeEntry>> InstallerBAIN::findSubpackages(
+  std::shared_ptr<const MOBase::IFileTree> tree, std::size_t* invalidFolders) const
+{
+  // Folders that can be present but do not impact the installation:
+  static const std::set<QString, FileNameComparator> IGNORED_FOLDERS{
+    "fomod", "omod conversion data", "images", "screenshots", "docs"
+  };
+
+  ModDataChecker* checker = m_MOInfo->managedGame()->feature<ModDataChecker>();
+
+  if (!checker) {
+    return {};
+  }
+
+  // each directory would have to serve as a top-level directory
+  std::vector<std::shared_ptr<const MOBase::FileTreeEntry>> subpackages;
+  std::size_t ninvalids = 0;
+  for (auto entry : *tree) {
+
+    if (!entry->isDir()) {
+      continue;
+    }
+
+    // ignore fomod in case of combined fomod/bain packages.
+    // dirs starting with -- are supposed to be ignored
+    if (IGNORED_FOLDERS.contains(entry->name()) ||
+      entry->name().startsWith("--")) {
+      continue;
+    }
+
+    if (checker->dataLooksValid(entry->astree()) == ModDataChecker::CheckReturn::VALID) {
+      subpackages.push_back(entry);
+    }
+    else {
+      ninvalids++;
+    }
+  }
+
+  if (invalidFolders) {
+    *invalidFolders = ninvalids;
+  }
+
+  return subpackages;
+}
 
 bool InstallerBAIN::isArchiveSupported(std::shared_ptr<const IFileTree> tree) const
 {
@@ -122,34 +167,10 @@ bool InstallerBAIN::isArchiveSupported(std::shared_ptr<const IFileTree> tree) co
     return false;
   }
 
-  int numValidDirs = 0;
-  int numInvalidDirs = 0;
+  std::size_t numInvalidDirs = 0;
+  auto subpackages = findSubpackages(tree, &numInvalidDirs);
 
-  // each directory would have to serve as a top-level directory
-  for (auto entry: *tree) {
-
-    if (!entry->isDir()) {
-      continue;
-    }
-
-    QString dirName = entry->name().toLower();
-
-    // ignore fomod in case of combined fomod/bain packages.
-    // dirs starting with -- are supposed to be ignored
-    if (FileNameComparator::compare(dirName, "fomod") == 0 ||
-      FileNameComparator::compare(dirName, "omod conversion data") == 0 ||
-        dirName.startsWith("--")) {
-      continue;
-    }
-
-    if (checker->dataLooksValid(entry->astree()) == ModDataChecker::CheckReturn::VALID) {
-      ++numValidDirs;
-    } else {
-      ++numInvalidDirs;
-    }
-  }
-
-  if (numValidDirs < 2) {
+  if (subpackages.size() < 2) {
     // a complex bain package contains at least 2 directories to choose from
     return false;
   } else if (numInvalidDirs == 0) {
@@ -175,7 +196,9 @@ IPluginInstaller::EInstallResult InstallerBAIN::install(GuessedValue<QString> &m
     packageTXT = manager()->extractFile(entry);
   }
 
-  BainComplexInstallerDialog dialog(tree, modName, m_PreviousOptions, packageTXT, parentWidget());
+  auto subpackages = findSubpackages(tree);
+
+  BainComplexInstallerDialog dialog(subpackages, modName, m_PreviousOptions, packageTXT, parentWidget());
 
   int res = dialog.exec();
 

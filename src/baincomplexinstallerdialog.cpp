@@ -28,7 +28,7 @@ using namespace MOBase;
 
 
 BainComplexInstallerDialog::BainComplexInstallerDialog(
-  std::shared_ptr<MOBase::IFileTree> tree, const GuessedValue<QString> &modName, 
+  const std::vector<std::shared_ptr<const MOBase::FileTreeEntry>> &subpackages, const GuessedValue<QString> &modName,
   const QStringList& defaultOptions, const QString &packageTXT, QWidget *parent)
   : TutorableDialog("BainInstaller", parent), ui(new Ui::BainComplexInstallerDialog), m_Manual(false),
     m_PackageTXT(packageTXT)
@@ -41,19 +41,14 @@ BainComplexInstallerDialog::BainComplexInstallerDialog(
 
   ui->nameCombo->setCurrentIndex(ui->nameCombo->findText(modName));
 
-  for (auto &entry: *tree) {
-    const QString &dirName = entry->name().toLower();
-    
-    
-    if (!entry->isDir() || dirName == "fomod" || dirName.startsWith("--")) {
-      continue;
-    }
+  for (const auto& subpackage : subpackages) {
 
-    QListWidgetItem *item = new QListWidgetItem(ui->optionsList);
-    item->setText(dirName);
+    auto name = subpackage->name();
+
+    QListWidgetItem *item = new QListWidgetItem(name, ui->optionsList);
     item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
 
-    if (dirName.mid(0, 2) == "00" || defaultOptions.contains(dirName, Qt::CaseInsensitive)) {
+    if (name.mid(0, 2) == "00" || defaultOptions.contains(name, Qt::CaseInsensitive)) {
       item->setCheckState(Qt::Checked);
     }
     else {
