@@ -54,6 +54,19 @@ public:
   virtual EInstallResult install(MOBase::GuessedValue<QString> &modName, std::shared_ptr<MOBase::IFileTree> &tree,
                                  QString &version, int &modID);
 
+protected:
+
+  /**
+   * @brief Retrieve the entries corresponding to subpackages in the given tree.
+   *
+   * @param tree The tree to check for subpackages.
+   * @param invalidFolders If not null, will contain the number of invalid folders.
+   *
+   * @return the list of entries corresponding to subpackages.
+   */
+  std::vector<std::shared_ptr<const MOBase::FileTreeEntry>> findSubpackages(
+    std::shared_ptr<const MOBase::IFileTree> tree, std::size_t *invalidFolders = nullptr) const;
+
 private:
 
   const MOBase::IOrganizer *m_MOInfo;
