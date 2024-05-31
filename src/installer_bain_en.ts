@@ -70,12 +70,12 @@ If there is a component called &quot;00 Core&quot; it is usually required. Optio
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="installerbain.cpp" line="179"/>
+        <location filename="installerbain.cpp" line="181"/>
         <source>May be BAIN installer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="installerbain.cpp" line="180"/>
+        <location filename="installerbain.cpp" line="182"/>
         <source>This installer looks like it may contain a BAIN installer but I&apos;m not sure. Install as BAIN installer?</source>
         <translation type="unfinished"></translation>
     </message>

@@ -40,7 +40,7 @@ InstallerBAIN::InstallerBAIN()
 }
 
 
-bool InstallerBAIN::init(IOrganizer *moInfo)
+bool InstallerBAIN::init(IOrganizer* moInfo)
 {
   m_MOInfo = moInfo;
   return true;
@@ -122,7 +122,7 @@ std::vector<std::shared_ptr<const MOBase::FileTreeEntry>> InstallerBAIN::findSub
     "fomod", "omod conversion data", "images", "screenshots", "docs"
   };
 
-  ModDataChecker* checker = m_MOInfo->managedGame()->feature<ModDataChecker>();
+  ModDataChecker* checker = m_MOInfo->gameFeatures()->gameFeature<ModDataChecker>();
 
   if (!checker) {
     return {};
@@ -161,7 +161,7 @@ std::vector<std::shared_ptr<const MOBase::FileTreeEntry>> InstallerBAIN::findSub
 
 bool InstallerBAIN::isArchiveSupported(std::shared_ptr<const IFileTree> tree) const
 {
-  ModDataChecker* checker = m_MOInfo->managedGame()->feature<ModDataChecker>();
+  ModDataChecker* checker = m_MOInfo->gameFeatures()->gameFeature<ModDataChecker>();
 
   if (!checker) {
     return false;
@@ -173,21 +173,23 @@ bool InstallerBAIN::isArchiveSupported(std::shared_ptr<const IFileTree> tree) co
   if (subpackages.size() < 2) {
     // a complex bain package contains at least 2 directories to choose from
     return false;
-  } else if (numInvalidDirs == 0) {
+  }
+  else if (numInvalidDirs == 0) {
     return true;
-  } else {
+  }
+  else {
     return QMessageBox::question(parentWidget(), tr("May be BAIN installer"),
-                                 tr("This installer looks like it may contain a BAIN installer but I'm not sure. "
-                                    "Install as BAIN installer?"),
-                                 QMessageBox::Yes | QMessageBox::No)
-            == QMessageBox::Yes;
+      tr("This installer looks like it may contain a BAIN installer but I'm not sure. "
+        "Install as BAIN installer?"),
+      QMessageBox::Yes | QMessageBox::No)
+      == QMessageBox::Yes;
   }
 
   return true;
 }
 
-IPluginInstaller::EInstallResult InstallerBAIN::install(GuessedValue<QString> &modName, std::shared_ptr<IFileTree> &tree,
-                                                        QString&, int&)
+IPluginInstaller::EInstallResult InstallerBAIN::install(GuessedValue<QString>& modName, std::shared_ptr<IFileTree>& tree,
+  QString&, int&)
 {
   auto entry = tree->find("package.txt", FileTreeEntry::FILE);
 
@@ -210,11 +212,13 @@ IPluginInstaller::EInstallResult InstallerBAIN::install(GuessedValue<QString> &m
     m_InstallerUsed = true;
 
     return IPluginInstaller::RESULT_SUCCESS;
-  } else {
+  }
+  else {
     if (dialog.manualRequested()) {
       modName.update(dialog.getName(), GUESS_USER);
       return IPluginInstaller::RESULT_MANUALREQUESTED;
-    } else {
+    }
+    else {
       return IPluginInstaller::RESULT_CANCELED;
     }
   }
