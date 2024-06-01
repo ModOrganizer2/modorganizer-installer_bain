@@ -17,9 +17,12 @@ You should have received a copy of the GNU General Public License
 along with Mod Organizer.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "installerbain.h"
+
 #include <iinstallationmanager.h>
 #include <moddatachecker.h>
 #include <iplugingame.h>
+#include <igamefeatures.h>
 
 #include <QDir>
 #include <QtPlugin>
@@ -27,7 +30,6 @@ along with Mod Organizer.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <log.h>
 
-#include "installerbain.h"
 #include "baincomplexinstallerdialog.h"
 
 
