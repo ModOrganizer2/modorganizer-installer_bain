@@ -30,12 +30,6 @@ If there is a component called &quot;00 Core&quot; it is usually required. Optio
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="baincomplexinstallerdialog.ui" line="77"/>
-        <location filename="baincomplexinstallerdialog.ui" line="80"/>
-        <source>The package.txt is often part of BAIN packages and contains details about the options available.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="baincomplexinstallerdialog.ui" line="61"/>
         <location filename="baincomplexinstallerdialog.ui" line="64"/>
         <source>Opens a Dialog that allows custom modifications.</source>
@@ -44,6 +38,12 @@ If there is a component called &quot;00 Core&quot; it is usually required. Optio
     <message>
         <location filename="baincomplexinstallerdialog.ui" line="67"/>
         <source>Manual</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="baincomplexinstallerdialog.ui" line="77"/>
+        <location filename="baincomplexinstallerdialog.ui" line="80"/>
+        <source>The package.txt is often part of BAIN packages and contains details about the options available.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
