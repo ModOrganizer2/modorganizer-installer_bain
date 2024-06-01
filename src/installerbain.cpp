@@ -124,7 +124,7 @@ std::vector<std::shared_ptr<const MOBase::FileTreeEntry>> InstallerBAIN::findSub
     "fomod", "omod conversion data", "images", "screenshots", "docs"
   };
 
-  ModDataChecker* checker = m_MOInfo->gameFeatures()->gameFeature<ModDataChecker>();
+  auto checker = m_MOInfo->gameFeatures()->gameFeature<ModDataChecker>();
 
   if (!checker) {
     return {};
@@ -163,7 +163,7 @@ std::vector<std::shared_ptr<const MOBase::FileTreeEntry>> InstallerBAIN::findSub
 
 bool InstallerBAIN::isArchiveSupported(std::shared_ptr<const IFileTree> tree) const
 {
-  ModDataChecker* checker = m_MOInfo->gameFeatures()->gameFeature<ModDataChecker>();
+  auto checker = m_MOInfo->gameFeatures()->gameFeature<ModDataChecker>();
 
   if (!checker) {
     return false;
