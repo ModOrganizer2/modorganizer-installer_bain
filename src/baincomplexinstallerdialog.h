@@ -20,16 +20,15 @@ along with Mod Organizer.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef BAINCOMPLEXINSTALLERDIALOG_H
 #define BAINCOMPLEXINSTALLERDIALOG_H
 
-#include <guessedvalue.h>
 #include "ifiletree.h"
+#include <guessedvalue.h>
 
 #include "tutorabledialog.h"
 
-
-namespace Ui {
+namespace Ui
+{
 class BainComplexInstallerDialog;
 }
-
 
 /**
  * @brief Dialog to choose from options offered by a (complex) bain package
@@ -37,21 +36,24 @@ class BainComplexInstallerDialog;
 class BainComplexInstallerDialog : public MOBase::TutorableDialog
 {
   Q_OBJECT
-  
+
 public:
- /**
-  * @brief Constructor
-  *
-  * @param tree the directory tree of the archive. The caller is resonsible to verify this actually qualifies as a bain installer
-  * @param modName proposed name for the mod. The dialog allows the user to change this
-  * @param defaultOptions The default options to select. Can contains options not actually present.
-  * @param packageTXT path to the extracted package.txt file or an empty string if there is none
-  * @param parent parent widget
-  **/
- explicit BainComplexInstallerDialog(const std::vector<std::shared_ptr<const MOBase::FileTreeEntry>> &subpackages,
-                                     const MOBase::GuessedValue<QString> &modName,
-                                     const QStringList &defaultOptions,
-                                     const QString &packageTXT, QWidget *parent);
+  /**
+   * @brief Constructor
+   *
+   * @param tree the directory tree of the archive. The caller is resonsible to verify
+   *this actually qualifies as a bain installer
+   * @param modName proposed name for the mod. The dialog allows the user to change this
+   * @param defaultOptions The default options to select. Can contains options not
+   *actually present.
+   * @param packageTXT path to the extracted package.txt file or an empty string if
+   *there is none
+   * @param parent parent widget
+   **/
+  explicit BainComplexInstallerDialog(
+      const std::vector<std::shared_ptr<const MOBase::FileTreeEntry>>& subpackages,
+      const MOBase::GuessedValue<QString>& modName, const QStringList& defaultOptions,
+      const QString& packageTXT, QWidget* parent);
   ~BainComplexInstallerDialog();
 
   /**
@@ -66,12 +68,12 @@ public:
 
   /**
    * @brief Remove from the given tree the option not selected by the user.
-   * 
+   *
    * @param tree The input tree.
    *
    * @return the list of options selected by the user.
    **/
-  QStringList updateTree(std::shared_ptr<MOBase::IFileTree> &tree);
+  QStringList updateTree(std::shared_ptr<MOBase::IFileTree>& tree);
 
 private slots:
 
@@ -84,12 +86,10 @@ private slots:
   void on_packageBtn_clicked();
 
 private:
-
-  Ui::BainComplexInstallerDialog *ui;
+  Ui::BainComplexInstallerDialog* ui;
 
   bool m_Manual;
   QString m_PackageTXT;
-
 };
 
-#endif // BAINCOMPLEXINSTALLERDIALOG_H
+#endif  // BAINCOMPLEXINSTALLERDIALOG_H
