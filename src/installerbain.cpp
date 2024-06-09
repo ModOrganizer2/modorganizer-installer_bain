@@ -19,28 +19,22 @@ along with Mod Organizer.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "installerbain.h"
 
-#include <iinstallationmanager.h>
-#include <moddatachecker.h>
-#include <iplugingame.h>
 #include <igamefeatures.h>
+#include <iinstallationmanager.h>
+#include <iplugingame.h>
+#include <moddatachecker.h>
 
 #include <QDir>
-#include <QtPlugin>
 #include <QMessageBox>
+#include <QtPlugin>
 
 #include <log.h>
 
 #include "baincomplexinstallerdialog.h"
 
-
 using namespace MOBase;
 
-
-InstallerBAIN::InstallerBAIN()
-  : m_MOInfo(nullptr)
-{
-}
-
+InstallerBAIN::InstallerBAIN() : m_MOInfo(nullptr) {}
 
 bool InstallerBAIN::init(IOrganizer* moInfo)
 {
@@ -57,7 +51,6 @@ QString InstallerBAIN::localizedName() const
 {
   return tr("BAIN Installer");
 }
-
 
 QString InstallerBAIN::author() const
 {
@@ -89,7 +82,8 @@ bool InstallerBAIN::isManualInstaller() const
   return false;
 }
 
-void InstallerBAIN::onInstallationStart(QString const& archive, bool reinstallation, IModInterface* currentMod)
+void InstallerBAIN::onInstallationStart(QString const& archive, bool reinstallation,
+                                        IModInterface* currentMod)
 {
   // We reset some field and fetch the previously installed options:
   m_InstallerUsed = false;
@@ -111,18 +105,19 @@ void InstallerBAIN::onInstallationEnd(EInstallResult result, IModInterface* newM
   if (result == EInstallResult::RESULT_SUCCESS && m_InstallerUsed) {
     newMod->clearPluginSettings(name());
     for (auto i = 0; i < m_SelectedOptions.size(); ++i) {
-      newMod->setPluginSetting(name(), QString("option%1").arg(i), m_SelectedOptions[i]);
+      newMod->setPluginSetting(name(), QString("option%1").arg(i),
+                               m_SelectedOptions[i]);
     }
   }
 }
 
-std::vector<std::shared_ptr<const MOBase::FileTreeEntry>> InstallerBAIN::findSubpackages(
-  std::shared_ptr<const MOBase::IFileTree> tree, std::size_t* invalidFolders) const
+std::vector<std::shared_ptr<const MOBase::FileTreeEntry>>
+InstallerBAIN::findSubpackages(std::shared_ptr<const MOBase::IFileTree> tree,
+                               std::size_t* invalidFolders) const
 {
   // Folders that can be present but do not impact the installation:
   static const std::set<QString, FileNameComparator> IGNORED_FOLDERS{
-    "fomod", "omod conversion data", "images", "screenshots", "docs"
-  };
+      "fomod", "omod conversion data", "images", "screenshots", "docs"};
 
   auto checker = m_MOInfo->gameFeatures()->gameFeature<ModDataChecker>();
 
@@ -141,15 +136,14 @@ std::vector<std::shared_ptr<const MOBase::FileTreeEntry>> InstallerBAIN::findSub
 
     // ignore fomod in case of combined fomod/bain packages.
     // dirs starting with -- are supposed to be ignored
-    if (IGNORED_FOLDERS.contains(entry->name()) ||
-      entry->name().startsWith("--")) {
+    if (IGNORED_FOLDERS.contains(entry->name()) || entry->name().startsWith("--")) {
       continue;
     }
 
-    if (checker->dataLooksValid(entry->astree()) == ModDataChecker::CheckReturn::VALID) {
+    if (checker->dataLooksValid(entry->astree()) ==
+        ModDataChecker::CheckReturn::VALID) {
       subpackages.push_back(entry);
-    }
-    else {
+    } else {
       ninvalids++;
     }
   }
@@ -170,28 +164,28 @@ bool InstallerBAIN::isArchiveSupported(std::shared_ptr<const IFileTree> tree) co
   }
 
   std::size_t numInvalidDirs = 0;
-  auto subpackages = findSubpackages(tree, &numInvalidDirs);
+  auto subpackages           = findSubpackages(tree, &numInvalidDirs);
 
   if (subpackages.size() < 2) {
     // a complex bain package contains at least 2 directories to choose from
     return false;
-  }
-  else if (numInvalidDirs == 0) {
+  } else if (numInvalidDirs == 0) {
     return true;
-  }
-  else {
+  } else {
     return QMessageBox::question(parentWidget(), tr("May be BAIN installer"),
-      tr("This installer looks like it may contain a BAIN installer but I'm not sure. "
-        "Install as BAIN installer?"),
-      QMessageBox::Yes | QMessageBox::No)
-      == QMessageBox::Yes;
+                                 tr("This installer looks like it may contain a BAIN "
+                                    "installer but I'm not sure. "
+                                    "Install as BAIN installer?"),
+                                 QMessageBox::Yes | QMessageBox::No) ==
+           QMessageBox::Yes;
   }
 
   return true;
 }
 
-IPluginInstaller::EInstallResult InstallerBAIN::install(GuessedValue<QString>& modName, std::shared_ptr<IFileTree>& tree,
-  QString&, int&)
+IPluginInstaller::EInstallResult
+InstallerBAIN::install(GuessedValue<QString>& modName, std::shared_ptr<IFileTree>& tree,
+                       QString&, int&)
 {
   auto entry = tree->find("package.txt", FileTreeEntry::FILE);
 
@@ -202,7 +196,8 @@ IPluginInstaller::EInstallResult InstallerBAIN::install(GuessedValue<QString>& m
 
   auto subpackages = findSubpackages(tree);
 
-  BainComplexInstallerDialog dialog(subpackages, modName, m_PreviousOptions, packageTXT, parentWidget());
+  BainComplexInstallerDialog dialog(subpackages, modName, m_PreviousOptions, packageTXT,
+                                    parentWidget());
 
   int res = dialog.exec();
 
@@ -211,22 +206,19 @@ IPluginInstaller::EInstallResult InstallerBAIN::install(GuessedValue<QString>& m
 
     // Update the tree:
     m_SelectedOptions = dialog.updateTree(tree);
-    m_InstallerUsed = true;
+    m_InstallerUsed   = true;
 
     return IPluginInstaller::RESULT_SUCCESS;
-  }
-  else {
+  } else {
     if (dialog.manualRequested()) {
       modName.update(dialog.getName(), GUESS_USER);
       return IPluginInstaller::RESULT_MANUALREQUESTED;
-    }
-    else {
+    } else {
       return IPluginInstaller::RESULT_CANCELED;
     }
   }
 }
 
-
-#if QT_VERSION < QT_VERSION_CHECK(5,0,0)
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 Q_EXPORT_PLUGIN2(installerBAIN, InstallerBAIN)
 #endif

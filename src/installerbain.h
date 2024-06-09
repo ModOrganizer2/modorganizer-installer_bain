@@ -20,20 +20,17 @@ along with Mod Organizer.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef INSTALLERBAIN_H
 #define INSTALLERBAIN_H
 
-
 #include <iplugininstallersimple.h>
-
 
 class InstallerBAIN : public MOBase::IPluginInstallerSimple
 {
   Q_OBJECT
   Q_INTERFACES(MOBase::IPlugin MOBase::IPluginInstaller MOBase::IPluginInstallerSimple)
-#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
   Q_PLUGIN_METADATA(IID "org.tannin.InstallerBAIN" FILE "installerbain.json")
 #endif
 
 public:
-
   InstallerBAIN();
 
   virtual bool init(MOBase::IOrganizer* moInfo) override;
@@ -47,15 +44,17 @@ public:
   virtual unsigned int priority() const;
   virtual bool isManualInstaller() const;
 
-  virtual void onInstallationStart(QString const& archive, bool reinstallation, MOBase::IModInterface* currentMod) override;
-  virtual void onInstallationEnd(EInstallResult result, MOBase::IModInterface* newMod) override;
+  virtual void onInstallationStart(QString const& archive, bool reinstallation,
+                                   MOBase::IModInterface* currentMod) override;
+  virtual void onInstallationEnd(EInstallResult result,
+                                 MOBase::IModInterface* newMod) override;
 
   virtual bool isArchiveSupported(std::shared_ptr<const MOBase::IFileTree> tree) const;
-  virtual EInstallResult install(MOBase::GuessedValue<QString> &modName, std::shared_ptr<MOBase::IFileTree> &tree,
-                                 QString &version, int &modID);
+  virtual EInstallResult install(MOBase::GuessedValue<QString>& modName,
+                                 std::shared_ptr<MOBase::IFileTree>& tree,
+                                 QString& version, int& modID);
 
 protected:
-
   /**
    * @brief Retrieve the entries corresponding to subpackages in the given tree.
    *
@@ -64,12 +63,12 @@ protected:
    *
    * @return the list of entries corresponding to subpackages.
    */
-  std::vector<std::shared_ptr<const MOBase::FileTreeEntry>> findSubpackages(
-    std::shared_ptr<const MOBase::IFileTree> tree, std::size_t *invalidFolders = nullptr) const;
+  std::vector<std::shared_ptr<const MOBase::FileTreeEntry>>
+  findSubpackages(std::shared_ptr<const MOBase::IFileTree> tree,
+                  std::size_t* invalidFolders = nullptr) const;
 
 private:
-
-  const MOBase::IOrganizer *m_MOInfo;
+  const MOBase::IOrganizer* m_MOInfo;
 
   // Indicates if the installer was used:
   bool m_InstallerUsed;
@@ -78,4 +77,4 @@ private:
   QStringList m_PreviousOptions, m_SelectedOptions;
 };
 
-#endif // INSTALLERBAIN_H
+#endif  // INSTALLERBAIN_H
