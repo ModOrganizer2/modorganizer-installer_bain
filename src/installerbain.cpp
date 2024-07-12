@@ -19,16 +19,15 @@ along with Mod Organizer.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "installerbain.h"
 
-#include <igamefeatures.h>
-#include <iinstallationmanager.h>
-#include <iplugingame.h>
-#include <moddatachecker.h>
+#include <uibase/game_features/igamefeatures.h>
+#include <uibase/game_features/moddatachecker.h>
+#include <uibase/iinstallationmanager.h>
+#include <uibase/iplugingame.h>
+#include <uibase/log.h>
 
 #include <QDir>
 #include <QMessageBox>
 #include <QtPlugin>
-
-#include <log.h>
 
 #include "baincomplexinstallerdialog.h"
 
@@ -82,8 +81,7 @@ bool InstallerBAIN::isManualInstaller() const
   return false;
 }
 
-void InstallerBAIN::onInstallationStart(QString const& archive, bool reinstallation,
-                                        IModInterface* currentMod)
+void InstallerBAIN::onInstallationStart(QString const&, bool, IModInterface* currentMod)
 {
   // We reset some field and fetch the previously installed options:
   m_InstallerUsed = false;

@@ -20,10 +20,9 @@ along with Mod Organizer.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef BAINCOMPLEXINSTALLERDIALOG_H
 #define BAINCOMPLEXINSTALLERDIALOG_H
 
-#include "ifiletree.h"
-#include <guessedvalue.h>
-
-#include "tutorabledialog.h"
+#include <uibase/guessedvalue.h>
+#include <uibase/ifiletree.h>
+#include <uibase/tutorabledialog.h>
 
 namespace Ui
 {
