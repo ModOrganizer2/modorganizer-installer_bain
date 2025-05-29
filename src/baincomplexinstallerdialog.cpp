@@ -16,12 +16,13 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Mod Organizer.  If not, see <http://www.gnu.org/licenses/>.
 */
-
-#include "baincomplexinstallerdialog.h"
-#include "textviewer.h"
 #include "ui_baincomplexinstallerdialog.h"
 
 #include <QCompleter>
+
+#include <uibase/textviewer.h>
+
+#include "baincomplexinstallerdialog.h"
 
 using namespace MOBase;
 

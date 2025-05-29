@@ -60,22 +60,22 @@ If there is a component called &quot;00 Core&quot; it is usually required. Optio
 <context>
     <name>InstallerBAIN</name>
     <message>
-        <location filename="installerbain.cpp" line="52"/>
+        <location filename="installerbain.cpp" line="51"/>
         <source>BAIN Installer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="installerbain.cpp" line="62"/>
+        <location filename="installerbain.cpp" line="61"/>
         <source>Installer for BAIN archives (originally targeting Wrye Bash)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="installerbain.cpp" line="175"/>
+        <location filename="installerbain.cpp" line="173"/>
         <source>May be BAIN installer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="installerbain.cpp" line="176"/>
+        <location filename="installerbain.cpp" line="174"/>
         <source>This installer looks like it may contain a BAIN installer but I&apos;m not sure. Install as BAIN installer?</source>
         <translation type="unfinished"></translation>
     </message>
